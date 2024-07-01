@@ -10,6 +10,7 @@ def wash_data(name, type):
             continue
         data = np.loadtxt(file_path, delimiter=',', skiprows=1)
         data = data[~(data > 1000).any(axis=1)]
+        data = data[~(data < -1000).any(axis=1)]
         output_dir = "C:\\Github_LIU\\SII2025\\process_data"
         output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_washed.csv")
         np.savetxt(output_file_path, data, delimiter=',', fmt='%f')
