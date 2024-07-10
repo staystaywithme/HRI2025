@@ -17,8 +17,8 @@ def wash_data(name, type):
         df = df[df.iloc[:, 13] != -0.0625]
         # 转换回 NumPy 数组保存
         data = df.to_numpy()
-        output_dir = "/Users/syunsei/Desktop/SII2025/process_data/gomi/"
-        output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_washed.csv")
+        output_dir = "/Users/syunsei/Desktop/SII2025/process_data/gomi/reduce0"
+        output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_processed.csv")
         np.savetxt(output_file_path, data, delimiter=',', fmt='%f')
     return data
 
