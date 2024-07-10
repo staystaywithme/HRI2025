@@ -5,7 +5,7 @@ from scipy.signal import savgol_filter
 
 def wash_data(name, type):
     for i in range(1, 11):
-        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/gomi/{name}_{type}{i:02}_washed.csv"
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/gomi/reduce0/{name}_{type}{i:02}_processed.csv"
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
             continue
@@ -20,7 +20,7 @@ def wash_data(name, type):
         # 对数据进行平滑处理
         # 对每一列进行平滑处理（假设列数为n）
         for col in range(df.shape[1]):
-            df.iloc[:, col] = savgol_filter(df.iloc[:, col], window_length=11, polyorder=2)
+            df.iloc[:, col] = savgol_filter(df.iloc[:, col], window_length=11, polyorder=10)
         
         # 转换回 NumPy 数组保存
         data = df.to_numpy()
