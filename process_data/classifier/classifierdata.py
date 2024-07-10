@@ -22,7 +22,7 @@ def select_data(name, type):
         # 合并结果
         result = np.concatenate((filtered_data, pre_change_from_1, post_change_to_1))
 
-        data = np.hstack((result[:, 3:9], result[:, 12:17]))
+        data = np.hstack((result[:, 3:8], result[:, 12:17]))
         output_dir = "/Users/syunsei/Desktop/SII2025/process_data/classifier"
         os.makedirs(output_dir, exist_ok=True)
         output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_classify.csv")
