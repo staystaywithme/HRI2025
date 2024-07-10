@@ -29,10 +29,6 @@ print(X_train.shape, X_test.shape, X_val.shape,y_train.shape, y_test.shape, y_va
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Check if GPU is available
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Using device: {device}")
-
 # LSTM network definition
 class LSTMNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
