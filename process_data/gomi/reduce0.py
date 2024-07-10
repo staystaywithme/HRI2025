@@ -14,6 +14,7 @@ def wash_data(name, type):
         df = pd.DataFrame(data)
         # 过滤第五列值为 -0.0625 的行
         df = df[df.iloc[:, 4] != -0.0625]
+        df = df[df.iloc[:, 13] != -0.0625]
         # 转换回 NumPy 数组保存
         data = df.to_numpy()
         output_dir = "/Users/syunsei/Desktop/SII2025/process_data/gomi/"
