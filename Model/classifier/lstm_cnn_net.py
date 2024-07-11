@@ -11,11 +11,12 @@ class LSTM(nn.Module):
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.output_layer = nn.Linear(hidden_size, num_classes)
         
-        self.conv1 = nn.Conv1d(18, 64, 9)
+        self.conv1 = nn.Conv1d(12, 64, 9)
         self.conv2 = nn.Conv1d(64, 32, 5)
         self.conv3 = nn.Conv1d(32, 32, 5)
         self.conv4 = nn.Conv1d(32, 16, 5)
         self.relu = nn.LeakyReLU()
+        #self.relu = nn.ReLU()
         self.maxpool = nn.MaxPool1d(2, 2, padding=1)
         self.fc1 = nn.Linear(256, 256)  # 修改这一层的输出特征数
         self.fc2 = nn.Linear(256, 108)  # 新增一个全连接层
@@ -27,4 +28,20 @@ class LSTM(nn.Module):
         cell_state = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
         out, _ = self.lstm(x, (hidden_state, cell_state))
         out = self.output_layer(out[:, -1, :])
-        return out
+        
+        x = self.relu(self.conv1(x))
+        x = self.maxpool(x)
+        x = self.relu(self.conv2(x))
+        x = self.maxpool(x)
+        x = self.relu(self.conv3(x))
+        x = self.maxpool(x)
+        x = self.relu(self.conv4(x))
+        x = self.maxpool(x)
+        x = torch.flatten(x, 1)
+        x = self.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = self.fc3(x)
+        return x
+        #return out
