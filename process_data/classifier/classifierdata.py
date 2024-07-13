@@ -43,6 +43,9 @@ def select_data(name, type):
         if name in lists:
             data = data * -1
         
+        if name == "zhou" and type == "BC" and i == 1:
+            data = data * -1
+        
         output_dir = "/Users/syunsei/Desktop/SII2025/process_data/classifier"
         os.makedirs(output_dir, exist_ok=True)
         output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_classify.csv")
