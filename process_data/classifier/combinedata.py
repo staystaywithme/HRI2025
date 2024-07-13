@@ -46,10 +46,10 @@ AD = np.empty((0, 301, 12))
 BC = np.empty((0, 301, 12))
 BD = np.empty((0, 301, 12))
 
-def combine_data(name, data_type):
+def combine_data(name, data_type,timing):
     global AC, AD, BC, BD
     for i in range(1, 11):
-        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify.csv"
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
             continue
@@ -72,11 +72,15 @@ def combine_data(name, data_type):
     print(BD.shape)
     np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}.npy', eval(data_type))
 
+
+
 names = ["gashi", "jingchen", "liu", "qing", "wang", "zhou"]
 types = ["AC", "AD", "BC", "BD"]
+timings = {"80", "90","100", "110", "120"}
 
 # 调用函数处理每个名称和类型组合
 for name in names:
     for data_type in types:
-        combine_data(name, data_type)
-        #plot_segments(AC)
+        for timing in timings:
+            combine_data(name, data_type,timing)
+            #plot_segments(AC)
