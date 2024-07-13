@@ -31,20 +31,20 @@ def select_data(name, type):
         change_from_1 = np.where((data[:-1, 18] == 1.0) & (data[1:, 18] != 1.0))[0] + 1
         # 找出从不是1变成1的时间点
         change_to_1 = np.where((data[:-1, 18] != 1.0) & (data[1:, 18] == 1.0))[0] + 1
-        # 提取从1变成不是1的时间点的前20行
-        pre_change_from_1 = np.concatenate([data[max(0, idx-50):idx] for idx in change_from_1])
-        # 提取从不是1变成1的时间点的后20行
-        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+50)] for idx in change_to_1])
+        # 提取从1变成不是1的时间点的前_行
+        pre_change_from_1 = np.concatenate([data[max(0, idx-100):idx] for idx in change_from_1])
+        # 提取从不是1变成1的时间点的后_行
+        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+100)] for idx in change_to_1])
         # 合并结果
-        result = np.concatenate((filtered_data, pre_change_from_1, post_change_to_1))
+        result = np.concatenate((pre_change_from_1, filtered_data, post_change_to_1))
     
         data = np.hstack((result[:, 3:9], result[:, 12:18]))
         
-        if name in lists:
+        '''if name in lists:
             data = data * -1
         
         if name == "zhou" and type == "BC" and i == 1:
-            data = data * -1
+            data = data * -1'''
         
         output_dir = "/Users/syunsei/Desktop/SII2025/process_data/classifier"
         os.makedirs(output_dir, exist_ok=True)
