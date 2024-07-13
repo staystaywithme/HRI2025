@@ -4,20 +4,19 @@ import matplotlib.pyplot as plt
 
 #plot
 labels = ["xGyro1", "yGyro1", "zGyro1", "xAccl1", "yAccl1", "zAccl1", "xGyro2", "yGyro2", "zGyro2",  "xAccl2", "yAccl2", "zAccl2", ]
-def plot_segments(data_segments):
-    for i, segment in enumerate(data_segments):
+def plot_sample(data, name, type, file_index):
+    for i, segment in enumerate(data):
         plt.figure(figsize=(14, 7))  # 设置图片大小
-        for feature_index in range(segment.shape[1]):  # 假设每个段都有18个特征
-            plt.plot(segment[:,feature_index], label=labels[feature_index])
-        plt.title(f'{type} {name} Segment {i}')
-        i += 1 
+        plt.plot(segment[:,0:3], label=labels[0:3])
+        plt.title(f'{type} {name} File {file_index}')
         plt.xlabel('Time Point', fontsize=20)
         plt.ylabel('Value', fontsize=20)
         plt.xticks(fontsize=20)  # Increase font size of x-tick labels
         plt.yticks(fontsize=20) 
         plt.legend(loc='upper right', fontsize=12)  # 可能需要调整位置或去除，如果图例太大或重叠
         plt.show()
-        
+
+#selectdata
 def select_data(name, type):
     for i in range(1, 11):
         file_path = f"/Users/syunsei/Desktop/SII2025/process_data/gomi/reduce0/{name}_{type}{i:02}_processed.csv"
@@ -40,4 +39,25 @@ def select_data(name, type):
         result = np.concatenate((filtered_data, pre_change_from_1, post_change_to_1))
     
         data = np.hstack((result[:, 3:9], result[:, 12:18]))
+        
+        if name in lists:
+            data = data * -1
+        
+        output_dir = "/Users/syunsei/Desktop/SII2025/process_data/classifier"
+        os.makedirs(output_dir, exist_ok=True)
+        output_file_path = os.path.join(output_dir, f"{name}_{type}{i:02}_classify.csv")
+        np.savetxt(output_file_path, data, delimiter=',', fmt='%f')
+        print(f"Processed file saved to {output_file_path}")
+
+        #plot_sample([data],name, type, i)
+    return data
+
+names = ["gashi", "jingchen", "liu", "qing", "wang", "zhou"]
+types = ["AC", "AD", "BC", "BD"]
+lists = [ "liu", "wang", "zhou"]
+
+# 调用函数处理每个名称和类型组合
+for name in names:
+    for type in types:
+        select_data(name, type)
         

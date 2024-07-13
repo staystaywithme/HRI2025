@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+
 def process_data(data):
     data_length = len(data)
 
