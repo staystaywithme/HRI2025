@@ -108,9 +108,9 @@ def select_data80(name, type):
         # 找出从不是1变成1的时间点
         change_to_1 = np.where((data[:-1, 18] != 1.0) & (data[1:, 18] == 1.0))[0] + 1
         # 提取从1变成不是1的时间点的前_行
-        pre_change_from_1 = np.concatenate([data[max(0, idx-80):idx] for idx in change_from_1])
+        pre_change_from_1 = np.concatenate([data[max(0, idx-95):idx] for idx in change_from_1])
         # 提取从不是1变成1的时间点的后_行
-        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+120)] for idx in change_to_1])
+        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+105)] for idx in change_to_1])
         # 合并结果
         result = np.concatenate((pre_change_from_1, filtered_data, post_change_to_1))
     
@@ -184,9 +184,9 @@ def select_data120(name, type):
         # 找出从不是1变成1的时间点
         change_to_1 = np.where((data[:-1, 18] != 1.0) & (data[1:, 18] == 1.0))[0] + 1
         # 提取从1变成不是1的时间点的前_行
-        pre_change_from_1 = np.concatenate([data[max(0, idx-120):idx] for idx in change_from_1])
+        pre_change_from_1 = np.concatenate([data[max(0, idx-105):idx] for idx in change_from_1])
         # 提取从不是1变成1的时间点的后_行
-        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+80)] for idx in change_to_1])
+        post_change_to_1 = np.concatenate([data[idx:min(len(data), idx+95)] for idx in change_to_1])
         # 合并结果
         result = np.concatenate((pre_change_from_1, filtered_data, post_change_to_1))
     
