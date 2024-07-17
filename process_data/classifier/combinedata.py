@@ -141,4 +141,7 @@ for name in names:
             combine_train_data(name, data_type,timing)
             combine_val_data(name, data_type,timing)
             combine_test_data(name, data_type,timing)
+            print(AC_train.shape)
+            print(AC_val.shape)
+            print(AC_test.shape)
             #plot_segments(AC)
