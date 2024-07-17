@@ -3,15 +3,15 @@ import torch.nn as nn
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-class LSTM(nn.Module):
+class lstm_cnn(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
-        super(LSTM, self).__init__()
+        super(lstm_cnn, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.output_layer = nn.Linear(hidden_size, num_classes)
         
-        self.conv1 = nn.Conv1d(12, 64, 9)
+        self.conv1 = nn.Conv1d(6, 64, 9)
         self.conv2 = nn.Conv1d(64, 32, 5)
         self.conv3 = nn.Conv1d(32, 32, 5)
         self.conv4 = nn.Conv1d(32, 16, 5)
