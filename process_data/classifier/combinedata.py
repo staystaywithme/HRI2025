@@ -41,14 +41,24 @@ def plot_segments(data_segments):
         plt.legend(loc='upper right', fontsize=12)  # 可能需要调整位置或去除，如果图例太大或重叠
         plt.show()
 
-AC = np.empty((0, 301, 12))
-AD = np.empty((0, 301, 12))
-BC = np.empty((0, 301, 12))
-BD = np.empty((0, 301, 12))
+AC_train = np.empty((0, 301, 12))
+AD_train = np.empty((0, 301, 12))
+BC_train = np.empty((0, 301, 12))
+BD_train = np.empty((0, 301, 12))
 
-def combine_data(name, data_type,timing):
-    global AC, AD, BC, BD
-    for i in range(1, 11):
+AC_val = np.empty((0, 301, 12))
+AD_val = np.empty((0, 301, 12))
+BC_val = np.empty((0, 301, 12))
+BD_val = np.empty((0, 301, 12))
+
+AC_test = np.empty((0, 301, 12))
+AD_test = np.empty((0, 301, 12))
+BC_test = np.empty((0, 301, 12))
+BD_test = np.empty((0, 301, 12))
+
+def combine_train_data(name, data_type,timing):
+    global AC_train, AD_train, BC_train, BD_train
+    for i in range(1, 7):
         file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
@@ -59,20 +69,66 @@ def combine_data(name, data_type,timing):
         print(data.shape)
         data = np.expand_dims(data, axis=0)
         if data_type == "AC":
-            AC = np.concatenate((AC, data))
+            AC_train = np.concatenate((AC_train, data))
         elif data_type == "AD":
-            AD = np.concatenate((AD, data))
+            AD_train = np.concatenate((AD_train, data))
         elif data_type == "BC":
-            BC = np.concatenate((BC, data))
+            BC_train = np.concatenate((BC_train, data))
         elif data_type == "BD":
-            BD = np.concatenate((BD, data))
-    print(AC.shape)
-    print(AD.shape)
-    print(BC.shape)
-    print(BD.shape)
-    np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}.npy', eval(data_type))
+            BD_train = np.concatenate((BD_train, data))
+    print(AC_train.shape)
+    print(AD_train.shape)
+    print(BC_train.shape)
+    print(BD_train.shape)
+    np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}_train.npy', eval(f'{data_type}_train'))
 
+def combine_val_data(name, data_type,timing):
+    global AC_val, AD_val, BC_val, BD_val
+    for i in range(7, 9):
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
+        if not os.path.exists(file_path):
+            print(f"File {file_path} does not exist, skipping.")
+            continue
+        data = np.loadtxt(file_path, delimiter=',')
+        data = process_data(data)
+        data = np.expand_dims(data, axis=0)
+        if data_type == "AC":
+            AC_val = np.concatenate((AC_val, data))
+        elif data_type == "AD":
+            AD_val = np.concatenate((AD_val, data))
+        elif data_type == "BC":
+            BC_val = np.concatenate((BC_val, data))
+        elif data_type == "BD":
+            BD_val = np.concatenate((BD_val, data))
+    print(AC_val.shape)
+    print(AD_val.shape)
+    print(BC_val.shape)
+    print(BD_val.shape)
+    np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}_val.npy', eval(f'{data_type}_val'))
 
+def combine_test_data(name, data_type,timing):
+    global AC_test, AD_test, BC_test, BD_test
+    for i in range(9, 11):
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
+        if not os.path.exists(file_path):
+            print(f"File {file_path} does not exist, skipping.")
+            continue
+        data = np.loadtxt(file_path, delimiter=',')
+        data = process_data(data)
+        data = np.expand_dims(data, axis=0)
+        if data_type == "AC":
+            AC_test = np.concatenate((AC_test, data))
+        elif data_type == "AD":
+            AD_test = np.concatenate((AD_test, data))
+        elif data_type == "BC":
+            BC_test = np.concatenate((BC_test, data))
+        elif data_type == "BD":
+            BD_test = np.concatenate((BD_test, data))
+    print(AC_test.shape)
+    print(AD_test.shape)
+    print(BC_test.shape)
+    print(BD_test.shape)
+    np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}_test.npy', eval(f'{data_type}_test'))
 
 names = ["gashi", "jingchen", "liu", "qing", "wang", "zhou"]
 types = ["AC", "AD", "BC", "BD"]
@@ -82,5 +138,7 @@ timings = {"80", "90","100", "110", "120"}
 for name in names:
     for data_type in types:
         for timing in timings:
-            combine_data(name, data_type,timing)
+            combine_train_data(name, data_type,timing)
+            combine_val_data(name, data_type,timing)
+            combine_test_data(name, data_type,timing)
             #plot_segments(AC)
