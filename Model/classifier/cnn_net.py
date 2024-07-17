@@ -5,7 +5,7 @@ import torch.nn as nn
 class MyNet(nn.Module):
     def __init__(self):
         super(MyNet, self).__init__()
-        self.conv1 = nn.Conv1d(6, 64, 9)
+        self.conv1 = nn.Conv1d(12, 64, 9)
         self.conv2 = nn.Conv1d(64, 32, 5)
         self.conv3 = nn.Conv1d(32, 32, 5)
         self.conv4 = nn.Conv1d(32, 16, 5)
