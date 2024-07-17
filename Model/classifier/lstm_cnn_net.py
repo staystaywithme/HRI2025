@@ -6,7 +6,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class lstm_cnn(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
         super(lstm_cnn, self).__init__()
-        self.conv1 = nn.Conv1d(6, 64, 9)
+        self.conv1 = nn.Conv1d(12, 64, 9)
         self.conv2 = nn.Conv1d(64, 32, 5)
         self.conv3 = nn.Conv1d(32, 32, 5)
         self.conv4 = nn.Conv1d(32, 16, 5)
@@ -16,7 +16,7 @@ class lstm_cnn(nn.Module):
         self.fc1 = nn.Linear(256, 256)  # 修改这一层的输出特征数
         self.fc2 = nn.Linear(256, 108)  # 新增一个全连接层
         self.dropout = nn.Dropout(0.5)  # Dropout 层，概率为0.5
-        self.fc3 = nn.Linear(108, 4)  # 这是原来的第二个全连接层，现在变成第三个
+        self.fc3 = nn.Linear(108, 32)  # 这是原来的第二个全连接层，现在变成第三个
         
         self.hidden_size = hidden_size
         self.num_layers = num_layers
