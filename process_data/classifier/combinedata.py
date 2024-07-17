@@ -60,6 +60,7 @@ def combine_train_data(name, data_type,timing):
     global AC_train, AD_train, BC_train, BD_train
     for i in range(1, 7):
         file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
+        print(file_path)
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
             continue
@@ -82,10 +83,11 @@ def combine_train_data(name, data_type,timing):
     print(BD_train.shape)
     np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}_train.npy', eval(f'{data_type}_train'))
 
-def combine_val_data(name, data_type,timing):
+def combine_val_data(name, data_type):
     global AC_val, AD_val, BC_val, BD_val
     for i in range(7, 9):
-        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify.csv"
+        print(file_path)
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
             continue
@@ -106,10 +108,11 @@ def combine_val_data(name, data_type,timing):
     print(BD_val.shape)
     np.save(f'/Users/syunsei/Desktop/SII2025/process_data/classifier/{data_type}_val.npy', eval(f'{data_type}_val'))
 
-def combine_test_data(name, data_type,timing):
+def combine_test_data(name, data_type):
     global AC_test, AD_test, BC_test, BD_test
     for i in range(9, 11):
-        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify_{timing}.csv"
+        file_path = f"/Users/syunsei/Desktop/SII2025/process_data/classifier/{name}_{data_type}{i:02}_classify.csv"
+        print(file_path)
         if not os.path.exists(file_path):
             print(f"File {file_path} does not exist, skipping.")
             continue
@@ -139,9 +142,12 @@ for name in names:
     for data_type in types:
         for timing in timings:
             combine_train_data(name, data_type,timing)
-            combine_val_data(name, data_type,timing)
-            combine_test_data(name, data_type,timing)
-            print(AC_train.shape)
-            print(AC_val.shape)
-            print(AC_test.shape)
-            #plot_segments(AC)
+ 
+for name in names:
+    for data_type in types:
+        combine_val_data(name, data_type)
+        combine_test_data(name, data_type)
+
+print(AC_train.shape)
+print(AC_val.shape)
+print(AC_test.shape)
