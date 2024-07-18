@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
-from lstm_net import LSTM
+from lstm_cnn_net import lstm_cnn
+from dataprocess import reduce0, reducenoice, data301
+
 import numpy as np
 
 import smbus
@@ -8,7 +10,6 @@ import time
 import struct
 from gpiozero import MCP3008
 import numpy as np
-import keyboard
 
 ##########
 # クラス
@@ -251,7 +252,6 @@ def main():
         #euler2 = sensor2.read_euler()
         gyroscope2 = sensor2.read_gyroscope()
         linear_accel2 = sensor2.read_linear_acceleration()
-        
         #euler1 = ','.join(map(str,euler1))
         gyroscope1 = ','.join(map(str,gyroscope1))
         linear_accel1 = ','.join(map(str,linear_accel1))
@@ -259,17 +259,29 @@ def main():
         gyroscope2 = ','.join(map(str,gyroscope2))
         linear_accel2 = ','.join(map(str,linear_accel2))
         pot_value = f"{pot.value:.3f}"
-        #print("{}, {}, {}, {}, {}, {}, {}".format(euler1, gyroscope1, linear_accel1,euler2, gyroscope2, linear_accel2, pot_value))
-        #time.sleep(0.05)
+        time.sleep(0.01)
         
         feature= np.array([ *gyroscope1.split(','), *linear_accel1.split(','),
                             *gyroscope2.split(','), *linear_accel2.split(','), pot_value],dtype=float)
-        data= np.vstack((data, feature))
+        timing = feature[13]
+        print("{}, {}, {}".format(gyroscope1, gyroscope2, pot_value))
+        while timing != 0:
+            data= np.vstack((data, feature))
+            print(data.shape)
         
-        print("{:03.3f}, {:03.3f}, {:03.3f}".format(gyroscope1, gyroscope2, pot_value))
+        data= reduce0(data)
+        data= reducenoice(data)
+        data= data301(data)
+        print(data.shape)
 
-        
-
+        #predict
+        model = lstm_cnn()
+        model.load_state_dict(torch.load('model.pth'))
+        model.eval()
+        data = torch.tensor(data, dtype=torch.float32)
+        data = data.unsqueeze(0)
+        output = model(data)
+        print(output)
         
 
 if __name__ == "__main__":
