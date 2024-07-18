@@ -11,21 +11,16 @@ class lstm_cnn(nn.Module):
         self.conv3 = nn.Conv1d(32, 32, 5)
         self.conv4 = nn.Conv1d(32, 16, 5)
         self.relu = nn.LeakyReLU()
-        #self.relu = nn.ReLU()
-        self.maxpool = nn.MaxPool1d(2, 2, padding=1)
-        self.fc1 = nn.Linear(256, 256)  # 修改这一层的输出特征数
-        self.fc2 = nn.Linear(256, 108)  # 新增一个全连接层
-        self.dropout = nn.Dropout(0.5)  # Dropout 层，概率为0.5
-        self.fc3 = nn.Linear(108, 32)  # 这是原来的第二个全连接层，现在变成第三个
-        
+        self.maxpool = nn.MaxPool1d(2, 2, padding=1)  # 添加池化层
+
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.lstm = nn.LSTM(16, hidden_size, num_layers, batch_first=True)  # 修改 input_size 为最后一个 Conv1d 层的输出通道数
         self.output_layer = nn.Linear(hidden_size, num_classes)
         
 
     def forward(self, x):
-        x = x.permute(0,2,1)
+        x = x.permute(0, 2, 1)  # 将形状调整为 (batch, feature, seq)
         x = self.relu(self.conv1(x))
         x = self.maxpool(x)
         x = self.relu(self.conv2(x))
@@ -34,17 +29,12 @@ class lstm_cnn(nn.Module):
         x = self.maxpool(x)
         x = self.relu(self.conv4(x))
         x = self.maxpool(x)
-        x = torch.flatten(x, 1)
-        x = self.relu(self.fc1(x))
-        x = self.dropout(x)
-        x = self.relu(self.fc2(x))
-        x = self.dropout(x)
-        x = self.fc3(x)
-        
+
+        x = x.permute(0, 2, 1)  # 将形状调整为 (batch, seq, feature) 以输入 LSTM
+
         hidden_state = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
         cell_state = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
         out, _ = self.lstm(x, (hidden_state, cell_state))
         out = self.output_layer(out[:, -1, :])
-        
-        return x
-        #return out
+
+        return out
