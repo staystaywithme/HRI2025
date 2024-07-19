@@ -242,7 +242,7 @@ def main():
     sensor1 = BNO055(bus, sensor1_address)
     sensor2 = BNO055(bus, sensor2_address)
 
-    data = np.empty((0, 13))
+    data = np.empty((0, 12))
 
    
     while True:
@@ -265,23 +265,33 @@ def main():
                             *gyroscope2.split(','), *linear_accel2.split(','), pot_value],dtype=float)
         timing = feature[12]
         print("{}, {}, {}".format(gyroscope1, gyroscope2, pot_value))
-        while timing != 1:
-            data= np.vstack((data, feature))
+        if timing != 1:
+            data= np.vstack((data, feature[0:12]))
             print(data.shape)
-        
-        data= reduce0(data)
-        data= reducenoice(data)
-        data= data301(data)
-        print(data.shape)
+        else:
+            if data.shape[0] > 100:
+                data= reduce0(data)
+                data= reducenoice(data)
+                data= data301(data)
+                print(data.shape)
 
-        #predict
-        model = lstm_cnn()
-        model.load_state_dict(torch.load('model.pth'))
-        model.eval()
-        data = torch.tensor(data, dtype=torch.float32)
-        data = data.unsqueeze(0)
-        output = model(data)
-        print(output)
+                #predict
+                sequence_len=301
+                input_len=12
+                hidden_size=128
+                num_layers=2
+                num_classes=4
+                
+                model = lstm_cnn(input_len, hidden_size, num_layers, num_classes)
+                model.load_state_dict(torch.load('model.pth'))
+                model.eval()
+                data = torch.tensor(data, dtype=torch.float32)
+                data = data.unsqueeze(0)
+                output = model(data)
+                print(output)
+                
+                #clean data
+                data = np.empty((0,12))
         
 
 if __name__ == "__main__":
