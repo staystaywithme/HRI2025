@@ -263,9 +263,9 @@ def main():
         
         feature= np.array([ *gyroscope1.split(','), *linear_accel1.split(','),
                             *gyroscope2.split(','), *linear_accel2.split(','), pot_value],dtype=float)
-        timing = feature[13]
+        timing = feature[12]
         print("{}, {}, {}".format(gyroscope1, gyroscope2, pot_value))
-        while timing != 0:
+        while timing != 1:
             data= np.vstack((data, feature))
             print(data.shape)
         
