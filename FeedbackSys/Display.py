@@ -288,6 +288,8 @@ def main():
                 data = torch.tensor(data, dtype=torch.float32)
                 data = data.unsqueeze(0)
                 output = model(data)
+                _, output = torch.max(output, 1)
+                output = output.item()
                 print(output)
                 
                 #clean data
