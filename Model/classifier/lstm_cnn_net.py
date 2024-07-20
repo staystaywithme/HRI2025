@@ -8,8 +8,7 @@ class lstm_cnn(nn.Module):
         super(lstm_cnn, self).__init__()
         self.conv1 = nn.Conv1d(12, 64, 9)
         self.conv2 = nn.Conv1d(64, 32, 5)
-        self.conv3 = nn.Conv1d(32, 32, 5)
-        self.conv4 = nn.Conv1d(32, 16, 5)
+        self.conv3 = nn.Conv1d(32, 16, 5)
         self.relu = nn.LeakyReLU()
         self.maxpool = nn.MaxPool1d(2, 2, padding=1)  # 添加池化层
 
@@ -20,14 +19,12 @@ class lstm_cnn(nn.Module):
         
 
     def forward(self, x):
-        x = x.permute(0, 2, 1)  # 将形状调整为 (batch, feature, seq)
+        x = x.permute(0, 2, 1)  # 将形状调整为 (batch, feature=12, seq=301) 
         x = self.relu(self.conv1(x))
         x = self.maxpool(x)
         x = self.relu(self.conv2(x))
         x = self.maxpool(x)
         x = self.relu(self.conv3(x))
-        x = self.maxpool(x)
-        x = self.relu(self.conv4(x))
         x = self.maxpool(x)
 
         x = x.permute(0, 2, 1)  # 将形状调整为 (batch, seq, feature) 以输入 LSTM
