@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 from scipy.signal import savgol_filter
 
+def wash_data(data):
+    data = data[~(data > 500).any(axis=1)]
+    data = data[~(data < -500).any(axis=1)]
+    return data
+    
 def reduce0(data):
     # 将 NumPy 数组转换为 Pandas DataFrame
     df = pd.DataFrame(data)

@@ -1,4 +1,4 @@
-from dataprocess import reduce0, reducenoice, data301
+from dataprocess import reduce0, reducenoice, data301, wash_data
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 test_a = np.loadtxt('test.csv', delimiter=',')
 test_b = np.loadtxt('test0.01.csv', delimiter=',')
 test_c = np.loadtxt('test0.001.csv', delimiter=',')
+test_liu = np.loadtxt('test_liuBC.csv', delimiter=',')
 
 def view (data):
+    test_processed = wash_data(data)
     test_processed = reduce0(data)
     test_processed = reducenoice(test_processed)
     test_processed = data301(test_processed)
@@ -20,6 +22,7 @@ def view (data):
 
     plt.show()
 
-view(test_a)
-view(test_b)
-view(test_c)
+#view(test_a)
+#iew(test_b)
+#view(test_c)
+view(test_liu)
