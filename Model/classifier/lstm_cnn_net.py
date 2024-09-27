@@ -6,9 +6,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class lstm_cnn(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
         super(lstm_cnn, self).__init__()
-        self.conv1 = nn.Conv1d(12, 64, 9)
-        self.conv2 = nn.Conv1d(12, 32, 5)
-        self.conv3 = nn.Conv1d(12, 16, 5)
+        self.conv1 = nn.Conv1d(12, 12, 9)
+        self.conv2 = nn.Conv1d(12, 12, 5)
+        self.conv3 = nn.Conv1d(12, 12, 5)
         self.relu = nn.LeakyReLU()
         self.maxpool = nn.MaxPool1d(2, 2, padding=1)  # 添加池化层
 
