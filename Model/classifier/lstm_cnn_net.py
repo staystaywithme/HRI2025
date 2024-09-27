@@ -6,15 +6,15 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class lstm_cnn(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
         super(lstm_cnn, self).__init__()
-        self.conv1 = nn.Conv1d(12, 12, 9)
-        self.conv2 = nn.Conv1d(12, 12, 5)
-        self.conv3 = nn.Conv1d(12, 12, 5)
+        self.conv1 = nn.Conv1d(12, 32, 10)
+        self.conv2 = nn.Conv1d(64, 128, 10)
+        self.conv3 = nn.Conv1d(128, 160, 10)
         self.relu = nn.LeakyReLU()
         self.maxpool = nn.MaxPool1d(2, 2, padding=1)  # 添加池化层
 
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(12, hidden_size, num_layers, batch_first=True)  # 修改 input_size 为最后一个 Conv1d 层的输出通道数
+        self.lstm = nn.LSTM(160, hidden_size, num_layers, batch_first=True)  # 修改 input_size 为最后一个 Conv1d 层的输出通道数
         self.output_layer = nn.Linear(hidden_size, num_classes)
         
 
